@@ -18,11 +18,20 @@ export const PERMISSION_MAP: Record<string, string[]> = {
   'Kinoinfos': ['Movie Data'],
   'Eigene Inhalte': ['Movie Data'],
   'Verwaltung': ['Invoices Overview', 'Transactions'],
+  'Abrechnungen': ['Invoices Overview'],
   'Abrechnungen anzeigen': ['Invoices Overview'],
   'Artikelverkauf': ['Transactions'],
   'Abrechnungen erstellen': ['Invoices Overview'],
   'Umsatzstatistik': ['Transactions'],
   'Verkaufsstatistik': ['Transactions'],
+  'Film-Daten': ['Movie Data'],
+  'Kundenanalyse': ['Customer Filter'],
+  'Webseiten-Statistiken': ['News', 'Movie Data'],
+  'Filmbeschreibungen': ['Movie Data'],
+  'Bald im Kino': ['Movie Data'],
+  'Postersortierung': ['Movie Data'],
+  'Filmattribute': ['Movie Data'],
+  'Programm neuladen': ['Movie Data'],
 };
 
 export function hasMenuAccess(

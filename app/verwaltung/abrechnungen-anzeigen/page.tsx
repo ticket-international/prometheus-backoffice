@@ -235,8 +235,9 @@ export default function AbrechnungenAnzeigenPage() {
             />
             <Bar
               dataKey="Auszahlung"
-              fill="hsl(var(--chart-1))"
+              fill="hsl(var(--foreground))"
               radius={[4, 4, 0, 0]}
+              activeBar={{ fill: 'hsl(var(--muted))' }}
             />
           </BarChart>
         </ResponsiveContainer>

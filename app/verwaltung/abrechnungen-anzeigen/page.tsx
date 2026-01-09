@@ -294,7 +294,7 @@ export default function AbrechnungenAnzeigenPage() {
                     </div>
                   </td>
                   <td className="px-4 py-3">
-                    <div className="flex items-center justify-center gap-2">
+                    <div className="flex items-center justify-center">
                       <div className="flex items-center gap-2">
                         <button
                           onClick={() => handlePreviewInvoice(group.activeInvoice)}
@@ -310,8 +310,6 @@ export default function AbrechnungenAnzeigenPage() {
                         >
                           <FiDownload size={16} />
                         </button>
-                      </div>
-                      <div className="w-10 flex items-center justify-center">
                         {hasMultipleVersions && (
                           <button
                             onClick={() => togglePeriodExpansion(group.year, group.month, group.period)}

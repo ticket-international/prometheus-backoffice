@@ -1,0 +1,134 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  :root {
+    --background: oklch(0.9911 0 0);
+    --foreground: oklch(0.2046 0 0);
+    --card: oklch(0.9911 0 0);
+    --card-foreground: oklch(0.2046 0 0);
+    --popover: oklch(0.9911 0 0);
+    --popover-foreground: oklch(0.4386 0 0);
+    --primary: oklch(0.8348 0.1302 160.9080);
+    --primary-foreground: oklch(0.2626 0.0147 166.4589);
+    --secondary: oklch(0.9940 0 0);
+    --secondary-foreground: oklch(0.2046 0 0);
+    --muted: oklch(0.9461 0 0);
+    --muted-foreground: oklch(0.2435 0 0);
+    --accent: oklch(0.9461 0 0);
+    --accent-foreground: oklch(0.2435 0 0);
+    --destructive: oklch(0.5523 0.1927 32.7272);
+    --destructive-foreground: oklch(0.9934 0.0032 17.2118);
+    --border: oklch(0.9037 0 0);
+    --input: oklch(0.9731 0 0);
+    --ring: oklch(0.8348 0.1302 160.9080);
+    --chart-1: oklch(0.8348 0.1302 160.9080);
+    --chart-2: oklch(0.6231 0.1880 259.8145);
+    --chart-3: oklch(0.6056 0.2189 292.7172);
+    --chart-4: oklch(0.7686 0.1647 70.0804);
+    --chart-5: oklch(0.6959 0.1491 162.4796);
+    --sidebar: oklch(0.9911 0 0);
+    --sidebar-foreground: oklch(0.5452 0 0);
+    --sidebar-primary: oklch(0.8348 0.1302 160.9080);
+    --sidebar-primary-foreground: oklch(0.2626 0.0147 166.4589);
+    --sidebar-accent: oklch(0.9461 0 0);
+    --sidebar-accent-foreground: oklch(0.2435 0 0);
+    --sidebar-border: oklch(0.9037 0 0);
+    --sidebar-ring: oklch(0.8348 0.1302 160.9080);
+    --radius: 0.5rem;
+    --shadow-sm: 0px 1px 3px 0px hsl(0 0% 0% / 0.17), 0px 1px 2px -1px hsl(0 0% 0% / 0.17);
+    --tracking-normal: 0.025em;
+  }
+
+  .dark {
+    --background: oklch(0.1822 0 0);
+    --foreground: oklch(0.9288 0.0126 255.5078);
+    --card: oklch(0.2046 0 0);
+    --card-foreground: oklch(0.9288 0.0126 255.5078);
+    --popover: oklch(0.2603 0 0);
+    --popover-foreground: oklch(0.7348 0 0);
+    --primary: oklch(0.6615 0.1196 180.4637);
+    --primary-foreground: oklch(0.9249 0 0);
+    --secondary: oklch(0.2603 0 0);
+    --secondary-foreground: oklch(0.9249 0 0);
+    --muted: oklch(0.2393 0 0);
+    --muted-foreground: oklch(0.7122 0 0);
+    --accent: oklch(0.3132 0 0);
+    --accent-foreground: oklch(0.9851 0 0);
+    --destructive: oklch(0.3123 0.0852 29.7877);
+    --destructive-foreground: oklch(0.9368 0.0045 34.3092);
+    --border: oklch(0.2809 0 0);
+    --input: oklch(0.2603 0 0);
+    --ring: oklch(0.8003 0.1821 151.7110);
+    --chart-1: oklch(0.8003 0.1821 151.7110);
+    --chart-2: oklch(0.7137 0.1434 254.6240);
+    --chart-3: oklch(0.7090 0.1592 293.5412);
+    --chart-4: oklch(0.8369 0.1644 84.4286);
+    --chart-5: oklch(0.7845 0.1325 181.9120);
+    --sidebar: oklch(0.1822 0 0);
+    --sidebar-foreground: oklch(0.6301 0 0);
+    --sidebar-primary: oklch(0.4365 0.1044 156.7556);
+    --sidebar-primary-foreground: oklch(0.9213 0.0135 167.1556);
+    --sidebar-accent: oklch(0.3132 0 0);
+    --sidebar-accent-foreground: oklch(0.9851 0 0);
+    --sidebar-border: oklch(0.2809 0 0);
+    --sidebar-ring: oklch(0.8003 0.1821 151.7110);
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    letter-spacing: var(--tracking-normal);
+  }
+
+  h1, h2, h3, h4, h5, h6 {
+    @apply font-semibold tracking-tight;
+  }
+}
+
+@layer components {
+  .card {
+    @apply rounded-lg border border-border bg-card text-card-foreground;
+    box-shadow: var(--shadow-sm);
+  }
+
+  .badge {
+    @apply inline-flex items-center justify-center rounded-full border border-border px-2 py-0.5 text-[11px] leading-none gap-1 whitespace-nowrap;
+  }
+
+  .badge-success {
+    background-color: color-mix(in oklch, var(--chart-1) 16%, transparent);
+    color: var(--primary-foreground);
+    border-color: color-mix(in oklch, var(--chart-1) 40%, var(--border));
+  }
+
+  .badge-soft {
+    background-color: color-mix(in oklch, var(--chart-2) 14%, transparent);
+    color: var(--foreground);
+    border-color: color-mix(in oklch, var(--chart-2) 35%, var(--border));
+  }
+
+  .badge-destructive {
+    background-color: color-mix(in oklch, var(--destructive) 20%, transparent);
+    color: var(--destructive-foreground);
+    border-color: color-mix(in oklch, var(--destructive) 45%, var(--border));
+  }
+
+  .badge-warning {
+    background-color: color-mix(in oklch, var(--chart-4) 18%, transparent);
+    color: var(--accent-foreground);
+    border-color: color-mix(in oklch, var(--chart-4) 40%, var(--border));
+  }
+}
+
+@layer utilities {
+  .text-balance {
+    text-wrap: balance;
+  }
+}

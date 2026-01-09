@@ -1,12 +1,11 @@
 'use client';
 
-import { useState, useEffect, useMemo } from 'react';
-import { FiFileText, FiRefreshCw, FiCalendar, FiDollarSign, FiChevronDown, FiChevronUp, FiAlertCircle, FiEye, FiDownload, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
+import { useState, useEffect } from 'react';
+import { FiFileText, FiRefreshCw, FiCalendar, FiChevronDown, FiChevronUp, FiAlertCircle, FiEye, FiDownload, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { Invoice } from '@/types/invoices';
 import { fetchInvoicesFromAPI } from '@/lib/invoicesService';
 import { getMonthName } from '@/lib/mockInvoices';
 import InvoicePreview from '@/components/InvoicePreview';
-import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '@/lib/AuthContext';
 import { useSite } from '@/lib/SiteContext';
 
@@ -142,32 +141,6 @@ export default function AbrechnungenAnzeigenPage() {
   const endIndex = startIndex + itemsPerPage;
   const paginatedInvoices = groupedInvoices.slice(startIndex, endIndex);
 
-  const chartData = useMemo(() => {
-    const now = new Date();
-    const last12Months = [];
-
-    for (let i = 11; i >= 0; i--) {
-      const date = new Date(now.getFullYear(), now.getMonth() - i, 1);
-      const year = date.getFullYear();
-      const month = date.getMonth() + 1;
-
-      const monthInvoices = invoices.filter(inv =>
-        inv.year === year && inv.month === month && inv.isActive
-      );
-
-      const grossAmount = monthInvoices.reduce((sum, inv) => sum + inv.grossAmount, 0);
-      const payoutAmount = monthInvoices.reduce((sum, inv) => sum + inv.payoutAmount, 0);
-
-      last12Months.push({
-        name: `${getMonthName(month).substring(0, 3)} ${year.toString().substring(2)}`,
-        Bruttobetrag: Math.round(grossAmount),
-        Auszahlung: Math.round(payoutAmount)
-      });
-    }
-
-    return last12Months;
-  }, [invoices]);
-
   return (
     <div className="p-6 space-y-6">
       <header>
@@ -204,43 +177,6 @@ export default function AbrechnungenAnzeigenPage() {
           <FiRefreshCw className={loading ? 'animate-spin' : ''} size={16} />
           Aktualisieren
         </button>
-      </div>
-
-      <div className="card p-6">
-        <div className="flex items-center gap-3 mb-6">
-          <FiDollarSign className="text-muted-foreground" size={18} />
-          <h2 className="text-sm font-medium tracking-tight">Auszahlungen der letzten 12 Monate</h2>
-        </div>
-        <ResponsiveContainer width="100%" height={300}>
-          <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--chart-grid))" />
-            <XAxis
-              dataKey="name"
-              tick={{ fill: 'hsl(var(--chart-axis))', fontSize: 12 }}
-              stroke="hsl(var(--chart-axis))"
-            />
-            <YAxis
-              tick={{ fill: 'hsl(var(--chart-axis))', fontSize: 12 }}
-              stroke="hsl(var(--chart-axis))"
-              tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
-            />
-            <Tooltip
-              contentStyle={{
-                backgroundColor: 'hsl(var(--card))',
-                border: '1px solid hsl(var(--border))',
-                borderRadius: '8px',
-                color: 'hsl(var(--foreground))'
-              }}
-              formatter={(value: number) => [`${value.toLocaleString('de-DE')} €`, 'Auszahlung']}
-            />
-            <Bar
-              dataKey="Auszahlung"
-              fill="hsl(var(--chart-bar))"
-              radius={[4, 4, 0, 0]}
-              activeBar={{ fill: 'hsl(var(--muted))' }}
-            />
-          </BarChart>
-        </ResponsiveContainer>
       </div>
 
       {!loading && groupedInvoices.length > 0 && (

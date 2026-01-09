@@ -72,6 +72,7 @@ const navItems: NavItem[] = [
         href: '/filme/postersortierung',
         icon: FiImage,
       },
+      { name: 'Film-Daten', href: '/film-daten', icon: FiBarChart2 },
       { name: 'Filmattribute', href: '/filme/filmattribute', icon: FiTag },
       {
         name: 'Programm neuladen',
@@ -102,6 +103,7 @@ const navItems: NavItem[] = [
       { name: 'Bearbeiten', href: '/kunden/bearbeiten', icon: FiEdit },
       { name: 'Auswertungen', href: '/kunden/auswertungen', icon: FiPieChart },
       { name: 'Statistiken', href: '/kunden/statistiken', icon: FiBarChart },
+      { name: 'Kundenanalyse', href: '/kundenanalyse', icon: FiUsers },
     ],
   },
   { name: 'Social Media', href: '/social-media', icon: FiShare2 },
@@ -116,12 +118,22 @@ const navItems: NavItem[] = [
         href: '/webseite/eigene-inhalte',
         icon: FiEdit,
       },
+      {
+        name: 'Webseiten-Statistiken',
+        href: '/webseiten-statistiken',
+        icon: FiBarChart2,
+      },
     ],
   },
   {
     name: 'Verwaltung',
     icon: FiDollarSign,
     subItems: [
+      {
+        name: 'Abrechnungen',
+        href: '/abrechnungen',
+        icon: FiDollarSign,
+      },
       {
         name: 'Abrechnungen anzeigen',
         href: '/verwaltung/abrechnungen-anzeigen',

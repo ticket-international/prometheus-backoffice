@@ -213,15 +213,15 @@ export default function AbrechnungenAnzeigenPage() {
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <BarChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--chart-grid))" />
             <XAxis
               dataKey="name"
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-              stroke="hsl(var(--border))"
+              tick={{ fill: 'hsl(var(--chart-axis))', fontSize: 12 }}
+              stroke="hsl(var(--chart-axis))"
             />
             <YAxis
-              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
-              stroke="hsl(var(--border))"
+              tick={{ fill: 'hsl(var(--chart-axis))', fontSize: 12 }}
+              stroke="hsl(var(--chart-axis))"
               tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
             />
             <Tooltip
@@ -235,7 +235,7 @@ export default function AbrechnungenAnzeigenPage() {
             />
             <Bar
               dataKey="Auszahlung"
-              fill="hsl(var(--foreground))"
+              fill="hsl(var(--chart-bar))"
               radius={[4, 4, 0, 0]}
               activeBar={{ fill: 'hsl(var(--muted))' }}
             />

@@ -35,6 +35,7 @@ function generateInvoiceForPeriod(
 
     invoices.push({
       id: faker.string.uuid(),
+      invoiceId: faker.number.int({ min: 1000, max: 9999 }),
       year,
       month,
       periodFrom: periodFrom.toISOString().split('T')[0],

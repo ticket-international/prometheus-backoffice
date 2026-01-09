@@ -10,6 +10,7 @@ function transformInvoiceResponse(apiInvoice: InvoiceAPIResponse): Invoice {
 
   return {
     id: `${apiInvoice.InvoiceID}-${apiInvoice.VersionNr}`,
+    invoiceId: apiInvoice.InvoiceID,
     year,
     month,
     periodFrom: apiInvoice.DateFrom,
@@ -70,6 +71,50 @@ export async function fetchInvoicesFromAPI(
     return invoices;
   } catch (error) {
     console.error('Failed to fetch invoices from API:', error);
+    throw error;
+  }
+}
+
+export async function downloadInvoicePDF(
+  apiKey: string,
+  siteId: number,
+  invoiceId: number,
+  fileName: string = 'rechnung.pdf'
+): Promise<void> {
+  try {
+    const response = await ApiClient.request<{ pDF: string } | InvoiceAPIErrorResponse>(
+      `3.0/reports/cinster/invoices/${invoiceId}`,
+      { apiKey, siteId }
+    );
+
+    if (isErrorResponse(response)) {
+      throw new Error(response.message || response.hTTPError);
+    }
+
+    const pdfBase64 = (response as { pDF: string }).pDF;
+
+    if (!pdfBase64) {
+      throw new Error('PDF-Daten sind leer');
+    }
+
+    const byteCharacters = atob(pdfBase64);
+    const byteNumbers = new Array(byteCharacters.length);
+    for (let i = 0; i < byteCharacters.length; i++) {
+      byteNumbers[i] = byteCharacters.charCodeAt(i);
+    }
+    const byteArray = new Uint8Array(byteNumbers);
+    const blob = new Blob([byteArray], { type: 'application/pdf' });
+
+    const url = window.URL.createObjectURL(blob);
+    const link = document.createElement('a');
+    link.href = url;
+    link.download = fileName;
+    document.body.appendChild(link);
+    link.click();
+    document.body.removeChild(link);
+    window.URL.revokeObjectURL(url);
+  } catch (error) {
+    console.error('Failed to download invoice PDF:', error);
     throw error;
   }
 }

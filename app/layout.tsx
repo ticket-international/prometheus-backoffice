@@ -7,6 +7,7 @@ import { SiteProvider } from '@/lib/SiteContext';
 import { DateRangeProvider } from '@/lib/DateRangeContext';
 import { DashboardLayout } from '@/components/DashboardLayout';
 import { ConsoleWarningFilter } from '@/components/ConsoleWarningFilter';
+import { Toaster } from 'sonner';
 
 const outfit = Outfit({
   subsets: ['latin'],
@@ -42,6 +43,7 @@ export default function RootLayout({
               </DateRangeProvider>
             </SiteProvider>
           </AuthProvider>
+          <Toaster />
         </ThemeProvider>
       </body>
     </html>

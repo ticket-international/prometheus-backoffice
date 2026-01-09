@@ -1,5 +1,6 @@
 export interface Invoice {
   id: string;
+  invoiceId: number;
   year: number;
   month: number;
   periodFrom: string;

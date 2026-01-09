@@ -3,11 +3,12 @@
 import { useState, useEffect } from 'react';
 import { FiFileText, FiRefreshCw, FiCalendar, FiChevronDown, FiChevronUp, FiAlertCircle, FiEye, FiDownload, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { Invoice } from '@/types/invoices';
-import { fetchInvoicesFromAPI } from '@/lib/invoicesService';
+import { fetchInvoicesFromAPI, downloadInvoicePDF } from '@/lib/invoicesService';
 import { getMonthName } from '@/lib/mockInvoices';
 import InvoicePreview from '@/components/InvoicePreview';
 import { useAuth } from '@/lib/AuthContext';
 import { useSite } from '@/lib/SiteContext';
+import { toast } from 'sonner';
 
 interface InvoicesByPeriod {
   year: number;
@@ -26,6 +27,7 @@ export default function AbrechnungenAnzeigenPage() {
   const [previewInvoice, setPreviewInvoice] = useState<Invoice | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
+  const [downloadingInvoiceId, setDownloadingInvoiceId] = useState<string | null>(null);
   const itemsPerPage = 6;
   const { session } = useAuth();
   const { selectedSiteId } = useSite();
@@ -127,6 +129,25 @@ export default function AbrechnungenAnzeigenPage() {
   const handleClosePreview = () => {
     setIsPreviewOpen(false);
     setTimeout(() => setPreviewInvoice(null), 300);
+  };
+
+  const handleDownloadInvoice = async (invoice: Invoice) => {
+    if (!session || selectedSiteId === null || selectedSiteId === 0) {
+      toast.error('Bitte wählen Sie einen Standort aus');
+      return;
+    }
+
+    setDownloadingInvoiceId(invoice.id);
+    try {
+      const fileName = `Rechnung_${getMonthName(invoice.month)}_${invoice.year}_V${invoice.version}.pdf`;
+      await downloadInvoicePDF(session.apiKey, selectedSiteId, invoice.invoiceId, fileName);
+      toast.success('Rechnung erfolgreich heruntergeladen');
+    } catch (error) {
+      console.error('Failed to download invoice:', error);
+      toast.error(error instanceof Error ? error.message : 'Fehler beim Herunterladen der Rechnung');
+    } finally {
+      setDownloadingInvoiceId(null);
+    }
   };
 
   const currentYear = new Date().getFullYear();
@@ -304,11 +325,16 @@ export default function AbrechnungenAnzeigenPage() {
                           <FiEye size={16} />
                         </button>
                         <button
-                          onClick={() => handlePreviewInvoice(group.activeInvoice)}
-                          className="p-2 bg-muted hover:bg-muted/80 text-white border border-border rounded-lg transition-colors"
+                          onClick={() => handleDownloadInvoice(group.activeInvoice)}
+                          disabled={downloadingInvoiceId === group.activeInvoice.id}
+                          className="p-2 bg-muted hover:bg-muted/80 text-white border border-border rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
                           title="Als PDF herunterladen"
                         >
-                          <FiDownload size={16} />
+                          {downloadingInvoiceId === group.activeInvoice.id ? (
+                            <FiRefreshCw size={16} className="animate-spin" />
+                          ) : (
+                            <FiDownload size={16} />
+                          )}
                         </button>
                         {hasMultipleVersions && (
                           <button
@@ -362,13 +388,27 @@ export default function AbrechnungenAnzeigenPage() {
                                     <div className="font-medium text-chart-1">{formatCurrency(invoice.payoutAmount)}</div>
                                   </div>
                                   <div className="text-center">
-                                    <button
-                                      onClick={() => handlePreviewInvoice(invoice)}
-                                      className="p-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg transition-colors"
-                                      title="Rechnung anzeigen"
-                                    >
-                                      <FiEye size={14} />
-                                    </button>
+                                    <div className="flex items-center justify-center gap-2">
+                                      <button
+                                        onClick={() => handlePreviewInvoice(invoice)}
+                                        className="p-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg transition-colors"
+                                        title="Rechnung anzeigen"
+                                      >
+                                        <FiEye size={14} />
+                                      </button>
+                                      <button
+                                        onClick={() => handleDownloadInvoice(invoice)}
+                                        disabled={downloadingInvoiceId === invoice.id}
+                                        className="p-1.5 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg transition-colors disabled:opacity-50 disabled:cursor-not-allowed"
+                                        title="Als PDF herunterladen"
+                                      >
+                                        {downloadingInvoiceId === invoice.id ? (
+                                          <FiRefreshCw size={14} className="animate-spin" />
+                                        ) : (
+                                          <FiDownload size={14} />
+                                        )}
+                                      </button>
+                                    </div>
                                   </div>
                                 </div>
                               </div>

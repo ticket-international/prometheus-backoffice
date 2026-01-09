@@ -263,17 +263,19 @@ export default function AbrechnungenAnzeigenPage() {
                           <div className="text-[11px] text-muted-foreground">
                             {formatDate(group.activeInvoice.periodFrom)} - {formatDate(group.activeInvoice.periodTo)}
                           </div>
-                          <div className="px-1.5 py-0.5 bg-muted rounded text-[10px] font-medium text-muted-foreground">
-                            P{group.period}
+                          <div className="flex items-center gap-2">
+                            <div className="px-1.5 py-0.5 bg-muted rounded text-[10px] font-medium text-muted-foreground">
+                              P{group.period}
+                            </div>
+                            {hasMultipleVersions && (
+                              <div className="px-2 py-0.5 bg-amber-500/10 border border-amber-500/20 rounded text-[10px] font-medium text-amber-400 flex items-center gap-1">
+                                <FiAlertCircle size={10} />
+                                {group.invoices.length}
+                              </div>
+                            )}
                           </div>
                         </div>
                       </div>
-                      {hasMultipleVersions && (
-                        <div className="px-2 py-0.5 bg-amber-500/10 border border-amber-500/20 rounded text-[10px] font-medium text-amber-400 flex items-center gap-1">
-                          <FiAlertCircle size={10} />
-                          {group.invoices.length}
-                        </div>
-                      )}
                     </div>
                   </td>
                   <td className="px-4 py-3 text-right">
@@ -293,33 +295,37 @@ export default function AbrechnungenAnzeigenPage() {
                   </td>
                   <td className="px-4 py-3">
                     <div className="flex items-center justify-center gap-2">
-                      <button
-                        onClick={() => handlePreviewInvoice(group.activeInvoice)}
-                        className="p-2 bg-primary/10 hover:bg-primary/20 text-primary border border-primary/20 rounded-lg transition-colors"
-                        title="Rechnung anzeigen"
-                      >
-                        <FiEye size={16} />
-                      </button>
-                      <button
-                        onClick={() => handlePreviewInvoice(group.activeInvoice)}
-                        className="p-2 bg-chart-1/10 hover:bg-chart-1/20 text-chart-1 border border-chart-1/20 rounded-lg transition-colors"
-                        title="Als PDF herunterladen"
-                      >
-                        <FiDownload size={16} />
-                      </button>
-                      {hasMultipleVersions && (
+                      <div className="flex items-center gap-2">
                         <button
-                          onClick={() => togglePeriodExpansion(group.year, group.month, group.period)}
-                          className="p-2 hover:bg-muted rounded-lg transition-colors"
-                          title={isExpanded ? 'Versionen ausblenden' : 'Versionen anzeigen'}
+                          onClick={() => handlePreviewInvoice(group.activeInvoice)}
+                          className="p-2 bg-muted hover:bg-muted/80 text-white border border-border rounded-lg transition-colors"
+                          title="Rechnung anzeigen"
                         >
-                          {isExpanded ? (
-                            <FiChevronUp className="text-muted-foreground" size={16} />
-                          ) : (
-                            <FiChevronDown className="text-muted-foreground" size={16} />
-                          )}
+                          <FiEye size={16} />
                         </button>
-                      )}
+                        <button
+                          onClick={() => handlePreviewInvoice(group.activeInvoice)}
+                          className="p-2 bg-muted hover:bg-muted/80 text-white border border-border rounded-lg transition-colors"
+                          title="Als PDF herunterladen"
+                        >
+                          <FiDownload size={16} />
+                        </button>
+                      </div>
+                      <div className="w-10 flex items-center justify-center">
+                        {hasMultipleVersions && (
+                          <button
+                            onClick={() => togglePeriodExpansion(group.year, group.month, group.period)}
+                            className="p-2 hover:bg-muted rounded-lg transition-colors"
+                            title={isExpanded ? 'Versionen ausblenden' : 'Versionen anzeigen'}
+                          >
+                            {isExpanded ? (
+                              <FiChevronUp className="text-muted-foreground" size={16} />
+                            ) : (
+                              <FiChevronDown className="text-muted-foreground" size={16} />
+                            )}
+                          </button>
+                        )}
+                      </div>
                     </div>
                   </td>
                 </tr>

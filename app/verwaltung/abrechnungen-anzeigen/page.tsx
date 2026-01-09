@@ -6,7 +6,7 @@ import { Invoice } from '@/types/invoices';
 import { fetchInvoicesFromAPI } from '@/lib/invoicesService';
 import { getMonthName } from '@/lib/mockInvoices';
 import InvoicePreview from '@/components/InvoicePreview';
-import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, ResponsiveContainer } from 'recharts';
 import { useAuth } from '@/lib/AuthContext';
 import { useSite } from '@/lib/SiteContext';
 
@@ -209,10 +209,10 @@ export default function AbrechnungenAnzeigenPage() {
       <div className="card p-6">
         <div className="flex items-center gap-3 mb-6">
           <FiDollarSign className="text-muted-foreground" size={18} />
-          <h2 className="text-sm font-medium tracking-tight">Übersicht der letzten 12 Monate</h2>
+          <h2 className="text-sm font-medium tracking-tight">Auszahlungen der letzten 12 Monate</h2>
         </div>
         <ResponsiveContainer width="100%" height={300}>
-          <LineChart data={chartData}>
+          <BarChart data={chartData}>
             <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis
               dataKey="name"
@@ -231,26 +231,14 @@ export default function AbrechnungenAnzeigenPage() {
                 borderRadius: '8px',
                 color: 'hsl(var(--foreground))'
               }}
-              formatter={(value: number) => `${value.toLocaleString('de-DE')} €`}
+              formatter={(value: number) => [`${value.toLocaleString('de-DE')} €`, 'Auszahlung']}
             />
-            <Legend
-              wrapperStyle={{ color: 'hsl(var(--foreground))' }}
-            />
-            <Line
-              type="monotone"
-              dataKey="Bruttobetrag"
-              stroke="hsl(var(--chart-3))"
-              strokeWidth={2}
-              dot={{ fill: 'hsl(var(--background))', stroke: 'hsl(var(--chart-3))', strokeWidth: 2, r: 4 }}
-            />
-            <Line
-              type="monotone"
+            <Bar
               dataKey="Auszahlung"
-              stroke="hsl(var(--chart-1))"
-              strokeWidth={2}
-              dot={{ fill: 'hsl(var(--background))', stroke: 'hsl(var(--chart-1))', strokeWidth: 2, r: 4 }}
+              fill="hsl(var(--chart-1))"
+              radius={[4, 4, 0, 0]}
             />
-          </LineChart>
+          </BarChart>
         </ResponsiveContainer>
       </div>
 

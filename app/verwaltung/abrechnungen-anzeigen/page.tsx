@@ -241,14 +241,14 @@ export default function AbrechnungenAnzeigenPage() {
               dataKey="Bruttobetrag"
               stroke="hsl(var(--chart-3))"
               strokeWidth={2}
-              dot={{ fill: 'hsl(var(--chart-3))' }}
+              dot={{ fill: 'hsl(var(--background))', stroke: 'hsl(var(--chart-3))', strokeWidth: 2, r: 4 }}
             />
             <Line
               type="monotone"
               dataKey="Auszahlung"
               stroke="hsl(var(--chart-1))"
               strokeWidth={2}
-              dot={{ fill: 'hsl(var(--chart-1))' }}
+              dot={{ fill: 'hsl(var(--background))', stroke: 'hsl(var(--chart-1))', strokeWidth: 2, r: 4 }}
             />
           </LineChart>
         </ResponsiveContainer>

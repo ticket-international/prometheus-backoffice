@@ -14,6 +14,24 @@ export interface Invoice {
   notes: string;
 }
 
+export interface InvoiceAPIResponse {
+  SiteID: number;
+  DateFrom: string;
+  DateTo: string;
+  GrossAmount: number;
+  CustomerAmount: number;
+  PaidAmount: number;
+  InvoiceID: number;
+  VersionNr: number;
+}
+
+export interface InvoiceAPIErrorResponse {
+  hTTPError: string;
+  returnCode: number;
+  detailCode: number;
+  message: string;
+}
+
 export interface InvoiceGroup {
   year: number;
   month: number;

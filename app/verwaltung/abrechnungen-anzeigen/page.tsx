@@ -3,10 +3,12 @@
 import { useState, useEffect, useMemo } from 'react';
 import { FiFileText, FiRefreshCw, FiCalendar, FiDollarSign, FiChevronDown, FiChevronUp, FiAlertCircle, FiEye, FiDownload, FiChevronLeft, FiChevronRight } from 'react-icons/fi';
 import { Invoice } from '@/types/invoices';
-import { fetchInvoices } from '@/lib/api';
+import { fetchInvoicesFromAPI } from '@/lib/invoicesService';
 import { getMonthName } from '@/lib/mockInvoices';
 import InvoicePreview from '@/components/InvoicePreview';
 import { LineChart, Line, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
+import { useAuth } from '@/lib/AuthContext';
+import { useSite } from '@/lib/SiteContext';
 
 interface InvoicesByPeriod {
   year: number;
@@ -19,24 +21,37 @@ interface InvoicesByPeriod {
 export default function AbrechnungenAnzeigenPage() {
   const [invoices, setInvoices] = useState<Invoice[]>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
   const [selectedYear, setSelectedYear] = useState<number>(new Date().getFullYear());
   const [expandedPeriods, setExpandedPeriods] = useState<Set<string>>(new Set());
   const [previewInvoice, setPreviewInvoice] = useState<Invoice | null>(null);
   const [isPreviewOpen, setIsPreviewOpen] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 6;
+  const { session } = useAuth();
+  const { selectedSiteId } = useSite();
 
   useEffect(() => {
-    loadInvoices();
-  }, []);
+    if (session && selectedSiteId) {
+      loadInvoices();
+    }
+  }, [session, selectedSiteId]);
 
   const loadInvoices = async () => {
+    if (!session || selectedSiteId === null || selectedSiteId === 0) {
+      setError('Bitte wählen Sie einen Standort aus');
+      setLoading(false);
+      return;
+    }
+
     setLoading(true);
+    setError(null);
     try {
-      const data = await fetchInvoices();
+      const data = await fetchInvoicesFromAPI(session.apiKey, selectedSiteId);
       setInvoices(data);
     } catch (error) {
       console.error('Failed to load invoices:', error);
+      setError(error instanceof Error ? error.message : 'Fehler beim Laden der Abrechnungen');
     } finally {
       setLoading(false);
     }
@@ -259,6 +274,13 @@ export default function AbrechnungenAnzeigenPage() {
           <div className="p-8 text-center text-muted-foreground text-sm">
             <FiRefreshCw className="animate-spin inline-block mr-2" size={16} />
             Lade Abrechnungen...
+          </div>
+        ) : error ? (
+          <div className="p-8 text-center">
+            <div className="inline-flex items-center gap-2 px-4 py-3 bg-destructive/10 border border-destructive/20 rounded-lg text-destructive text-sm">
+              <FiAlertCircle size={16} />
+              {error}
+            </div>
           </div>
         ) : groupedInvoices.length === 0 ? (
           <div className="p-8 text-center text-muted-foreground text-sm">

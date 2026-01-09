@@ -48,7 +48,7 @@ export default function BaldImKinoPage() {
           endpoint: 'events/soonincinema',
           apikey: session.apiKey,
           siteid: selectedSiteId.toString(),
-          includeimages: 2
+          includeimages: '2'
         });
 
         const apiUrl = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/functions/v1/api-proxy`;

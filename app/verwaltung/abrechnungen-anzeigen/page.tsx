@@ -130,7 +130,10 @@ export default function AbrechnungenAnzeigenPage() {
     setTimeout(() => setPreviewInvoice(null), 300);
   };
 
-  const availableYears = Array.from(new Set(invoices.map(inv => inv.year))).sort((a, b) => b - a);
+  const currentYear = new Date().getFullYear();
+  const yearsFromInvoices = Array.from(new Set(invoices.map(inv => inv.year)));
+  const allYears = Array.from(new Set([currentYear, ...yearsFromInvoices])).sort((a, b) => b - a);
+  const availableYears = allYears;
   const filteredInvoices = invoices.filter(inv => inv.year === selectedYear);
   const groupedInvoices = groupInvoicesByPeriod(filteredInvoices);
 
@@ -210,15 +213,15 @@ export default function AbrechnungenAnzeigenPage() {
         </div>
         <ResponsiveContainer width="100%" height={300}>
           <LineChart data={chartData}>
-            <CartesianGrid strokeDasharray="3 3" className="stroke-border" />
+            <CartesianGrid strokeDasharray="3 3" stroke="hsl(var(--border))" />
             <XAxis
               dataKey="name"
-              className="text-xs"
-              tick={{ fill: 'hsl(var(--muted-foreground))' }}
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+              stroke="hsl(var(--border))"
             />
             <YAxis
-              className="text-xs"
-              tick={{ fill: 'hsl(var(--muted-foreground))' }}
+              tick={{ fill: 'hsl(var(--muted-foreground))', fontSize: 12 }}
+              stroke="hsl(var(--border))"
               tickFormatter={(value) => `${(value / 1000).toFixed(0)}k`}
             />
             <Tooltip
